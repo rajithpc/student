@@ -183,14 +183,14 @@ class _StudentFormScreenState extends State<StudentFormScreen> {
       String email = _emailController.text.trim();
 
       StudentModel studentData = StudentModel(
-          id: widget.student == null ? 0 : widget.student!.id,
+          id: widget.student == null ? '0' : widget.student!.id,
           name: name,
           age: age,
           email: email,
           gender: _selectedGender!,
           domain: _selectedDomain!);
       widget.student == null
-          ? database.addData(studentData)
+          ? database.addStudent(studentData)
           : database.updateStudent(studentData);
       Navigator.pop(context, studentData);
     }
