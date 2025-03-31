@@ -1,8 +1,8 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:student/database/crud_functions.dart';
 import 'package:student/models/student_model.dart';
 import 'package:student/widgets/students_list_item.dart';
-
 import 'search.dart';
 
 class StudentsList extends StatefulWidget {
@@ -13,15 +13,10 @@ class StudentsList extends StatefulWidget {
 }
 
 class _StudentsListState extends State<StudentsList> {
-  late Future<List<StudentModel>> studentsFuture;
-  List<StudentModel> students = [];
   DatabaseFuntions database = DatabaseFuntions();
-
-  @override
-  void initState() {
-    super.initState();
-    studentsFuture = database.fetchStudents();
-  }
+  List<StudentModel> students = [];
+  List<StudentModel> filteredStudents = [];
+  bool isSearching = false;
 
   @override
   Widget build(BuildContext context) {
@@ -29,28 +24,36 @@ class _StudentsListState extends State<StudentsList> {
       children: [
         Search(onSearch: _filterStudents),
         Expanded(
-          child: FutureBuilder<List<StudentModel>>(
-            future: studentsFuture,
+          child: StreamBuilder<QuerySnapshot>(
+            stream:
+                FirebaseFirestore.instance.collection('student').snapshots(),
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {
                 return const Center(child: CircularProgressIndicator());
               } else if (snapshot.hasError) {
                 return Center(child: Text("Error: ${snapshot.error}"));
-              } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+              } else if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
                 return const Center(child: Text("No students found"));
               }
 
-              List<StudentModel> students = snapshot.data!;
+              students = snapshot.data!.docs.map((doc) {
+                return StudentModel.fromMap(
+                    doc.data() as Map<String, dynamic>, doc.id);
+              }).toList();
+
+              if (!isSearching) {
+                filteredStudents = List.from(students); // Reset filtered list
+              }
 
               return ListView.builder(
-                itemCount: students.length,
+                itemCount: filteredStudents.length,
                 itemBuilder: (context, index) {
-                  return StudentsListItem(student: students[index]);
+                  return StudentsListItem(student: filteredStudents[index]);
                 },
               );
             },
           ),
-        )
+        ),
       ],
     );
   }
@@ -58,9 +61,11 @@ class _StudentsListState extends State<StudentsList> {
   void _filterStudents(String query) {
     setState(() {
       if (query.isEmpty) {
-        students = students;
+        isSearching = false;
+        filteredStudents = List.from(students);
       } else {
-        students = students
+        isSearching = true;
+        filteredStudents = students
             .where((student) =>
                 student.name.toLowerCase().contains(query.toLowerCase()))
             .toList();

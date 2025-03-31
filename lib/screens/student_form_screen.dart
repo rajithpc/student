@@ -191,26 +191,8 @@ class _StudentFormScreenState extends State<StudentFormScreen> {
           domain: _selectedDomain!);
       widget.student == null
           ? database.addStudent(studentData)
-          : database.updateStudent(studentData);
-      Navigator.pop(context, studentData);
-    }
-  }
-
-  void editStudent(String studentId) {
-    if (_formKey.currentState!.validate()) {
-      String name = _nameController.text.trim();
-      int age = int.parse(_ageController.text.trim());
-      String email = _emailController.text.trim();
-
-      StudentModel studentData = StudentModel(
-          id: widget.student!.id,
-          name: name,
-          age: age,
-          email: email,
-          gender: _selectedGender!,
-          domain: _selectedDomain!);
-      database.updateStudent(studentData);
-      Navigator.pop(context, studentData);
+          : database.updateStudent(studentData, context);
+      Navigator.pop(context, true);
     }
   }
 }

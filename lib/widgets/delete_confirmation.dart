@@ -7,16 +7,16 @@ Future<void> confirmDelete(BuildContext context, String studentId) async {
     context: context,
     builder: (BuildContext context) {
       return AlertDialog(
-        title: Text("Confirm Delete"),
-        content: Text("Are you sure you want to delete this student?"),
+        title: const Text("Confirm Delete"),
+        content: const Text("Are you sure you want to delete this student?"),
         actions: [
           TextButton(
-            onPressed: () => Navigator.of(context).pop(false), // Cancel
-            child: Text("Cancel"),
+            onPressed: () => Navigator.of(context).pop(false),
+            child: const Text("Cancel"),
           ),
           TextButton(
             onPressed: () => Navigator.of(context).pop(true), // Confirm
-            child: Text("Delete", style: TextStyle(color: Colors.red)),
+            child: const Text("Delete", style: TextStyle(color: Colors.red)),
           ),
         ],
       );
@@ -24,6 +24,7 @@ Future<void> confirmDelete(BuildContext context, String studentId) async {
   );
 
   if (confirm == true) {
-    database.deleteStudent(studentId, context); // Call your delete function
+    // ignore: use_build_context_synchronously
+    database.deleteStudent(studentId, context);
   }
 }

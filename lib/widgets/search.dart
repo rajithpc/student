@@ -14,6 +14,7 @@ class Search extends StatelessWidget {
           prefix: const Icon(Icons.search),
           hintText: 'Search student here',
           border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
+          contentPadding: const EdgeInsets.all(10),
         ),
       ),
     );

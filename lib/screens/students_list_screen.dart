@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:student/screens/student_form_screen.dart';
-import 'package:student/screens/view_students.dart';
 import 'package:student/widgets/students_list.dart';
 
 class StudentsListScreen extends StatefulWidget {
@@ -19,28 +18,23 @@ class _StudentsListScreenState extends State<StudentsListScreen> {
         foregroundColor: Colors.white,
         centerTitle: true,
         title: const Text('Students List'),
-        actions: [
-          IconButton(
-              onPressed: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => const ViewStudents()));
-              },
-              icon: const Icon(Icons.remove_red_eye))
-        ],
       ),
       body: const Center(child: StudentsList()),
       floatingActionButton: FloatingActionButton(
-          child: const Icon(Icons.add),
-          onPressed: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => const StudentFormScreen(student: null),
-              ),
-            );
-          }),
+        child: const Icon(Icons.add),
+        onPressed: () async {
+          bool? studentAdded = await Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => const StudentFormScreen(student: null),
+            ),
+          );
+
+          if (studentAdded == true) {
+            setState(() {});
+          }
+        },
+      ),
     );
   }
 }
