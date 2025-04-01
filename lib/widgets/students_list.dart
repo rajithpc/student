@@ -42,13 +42,23 @@ class _StudentsListState extends State<StudentsList> {
               }).toList();
 
               if (!isSearching) {
-                filteredStudents = List.from(students); // Reset filtered list
+                filteredStudents = List.from(students);
               }
 
               return ListView.builder(
                 itemCount: filteredStudents.length,
                 itemBuilder: (context, index) {
-                  return StudentsListItem(student: filteredStudents[index]);
+                  return Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      StudentsListItem(
+                        student: filteredStudents[index],
+                      ),
+                      const SizedBox(
+                        height: 10,
+                      )
+                    ],
+                  );
                 },
               );
             },

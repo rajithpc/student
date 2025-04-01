@@ -2,8 +2,10 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import '../models/student_model.dart';
 import '../widgets/snackbar_message.dart';
+import 'image_functions.dart';
 
 class DatabaseFuntions {
+  ImageFunctions imageFunctions = ImageFunctions();
   Future<String> getNextStudentId() async {
     QuerySnapshot snapshot =
         await FirebaseFirestore.instance.collection('student').get();
@@ -23,13 +25,14 @@ class DatabaseFuntions {
   void addStudent(StudentModel student) async {
     String newId = await getNextStudentId();
     StudentModel studentData = StudentModel(
-      id: newId,
-      name: student.name,
-      age: student.age,
-      email: student.email,
-      gender: student.gender,
-      domain: student.domain,
-    );
+        id: newId,
+        name: student.name,
+        age: student.age,
+        email: student.email,
+        gender: student.gender,
+        domain: student.domain,
+        imageURL: student.imageURL,
+        publicID: student.publicID);
 
     createStudent(studentData);
   }
@@ -62,7 +65,8 @@ class DatabaseFuntions {
         'Student details updated successfully!');
   }
 
-  Future<void> deleteStudent(String studentId, BuildContext context) async {
+  void deleteStudent(
+      String studentId, BuildContext context, String? publicID) async {
     DocumentReference docRef =
         FirebaseFirestore.instance.collection('student').doc(studentId);
 
@@ -70,9 +74,14 @@ class DatabaseFuntions {
 
     if (doc.exists) {
       await docRef.delete();
-
-      // ignore: use_build_context_synchronously
-      SnackbarMessage.showSnackbar(context, 'Student Removed');
+    }
+    if (publicID != null) {
+      await imageFunctions.deleteImageFromCloudinary(publicID);
+    }
+    if (context.mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text("Student deleted successfully")),
+      );
     }
   }
 }

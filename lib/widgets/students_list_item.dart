@@ -10,21 +10,29 @@ class StudentsListItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListTile(
-        leading: const Icon(Icons.no_accounts_rounded),
-        title: Text(student.name),
-        onTap: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => StudentDetailsScreen(student: student),
-            ),
-          );
+      leading: CircleAvatar(
+        radius: 30,
+        backgroundColor: Colors.grey[300],
+        backgroundImage:
+            (student.imageURL != null && student.imageURL!.isNotEmpty)
+                ? NetworkImage(student.imageURL!)
+                : const AssetImage('assets/empty_user.jpg') as ImageProvider,
+      ),
+      title: Text(student.name),
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => StudentDetailsScreen(student: student),
+          ),
+        );
+      },
+      trailing: IconButton(
+        onPressed: () {
+          confirmDelete(context, student.id, student.publicID);
         },
-        trailing: IconButton(
-          onPressed: () {
-            confirmDelete(context, student.id);
-          },
-          icon: const Icon(Icons.delete),
-        ));
+        icon: const Icon(Icons.delete),
+      ),
+    );
   }
 }

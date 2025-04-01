@@ -9,6 +9,8 @@ class StudentModel {
   final String email;
   final GenderType gender;
   final DomainType domain;
+  final String? imageURL;
+  final String? publicID;
 
   StudentModel(
       {required this.id,
@@ -16,22 +18,9 @@ class StudentModel {
       required this.age,
       required this.email,
       required this.gender,
-      required this.domain});
-
-  // factory StudentModel.fromMap(String docId, Map<String, dynamic> map) {
-  //   return StudentModel(
-  //     id: map['id'] ?? '',
-  //     name: map['name'] ?? '',
-  //     age: map['age'] ?? 0,
-  //     email: map['email'] ?? '',
-  //     gender: GenderType.values.firstWhere(
-  //         (e) => e.toString().split('.').last == map['gender'],
-  //         orElse: () => GenderType.other),
-  //     domain: DomainType.values.firstWhere(
-  //         (e) => e.toString().split('.').last == map['domain'],
-  //         orElse: () => DomainType.dataScience),
-  //   );
-  // }
+      required this.domain,
+      required this.imageURL,
+      required this.publicID});
 
   Map<String, dynamic> toMap() {
     return {
@@ -41,17 +30,20 @@ class StudentModel {
       'email': email,
       'gender': gender.name,
       'domain': domain.name,
+      'imageURL': imageURL,
+      'publicID': publicID
     };
   }
 
   factory StudentModel.fromMap(Map<String, dynamic> data, String documentId) {
     return StudentModel(
-      id: documentId, // Assign Firestore document ID
-      name: data['name'],
-      age: data['age'],
-      email: data['email'],
-      gender: GenderType.values.firstWhere((e) => e.name == data['gender']),
-      domain: DomainType.values.firstWhere((e) => e.name == data['domain']),
-    );
+        id: documentId,
+        name: data['name'],
+        age: data['age'],
+        email: data['email'],
+        gender: GenderType.values.firstWhere((e) => e.name == data['gender']),
+        domain: DomainType.values.firstWhere((e) => e.name == data['domain']),
+        imageURL: data['imageURL'],
+        publicID: data['publicID']);
   }
 }

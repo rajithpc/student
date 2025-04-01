@@ -29,7 +29,17 @@ class StudentDetailsScreen extends StatelessWidget {
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  const Icon(Icons.person, size: 80, color: Colors.blueAccent),
+                  CircleAvatar(
+                    radius: 50,
+                    backgroundColor: Colors.grey[300],
+                    backgroundImage: student.imageURL != null
+                        ? NetworkImage(student.imageURL!) as ImageProvider
+                        : const AssetImage('assets/empty_user.jpg'),
+                    child: student.imageURL == null
+                        ? Image.asset('assets/empty_user.jpg',
+                            fit: BoxFit.cover)
+                        : null,
+                  ),
                   const SizedBox(height: 10),
                   Text(
                     student.name,

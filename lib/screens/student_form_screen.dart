@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:student/database/crud_functions.dart';
+import 'package:student/database/image_functions.dart';
 import 'package:student/models/student_model.dart';
 
 class StudentFormScreen extends StatefulWidget {
@@ -18,8 +20,11 @@ class _StudentFormScreenState extends State<StudentFormScreen> {
   final TextEditingController _emailController = TextEditingController();
   GenderType? _selectedGender;
   DomainType? _selectedDomain;
+  String? _imageUrl;
+  String? _publicId;
 
   DatabaseFuntions database = DatabaseFuntions();
+  ImageFunctions imageFunctions = ImageFunctions();
 
   @override
   void initState() {
@@ -30,6 +35,20 @@ class _StudentFormScreenState extends State<StudentFormScreen> {
       _emailController.text = widget.student!.email;
       _selectedGender = widget.student!.gender;
       _selectedDomain = widget.student!.domain;
+    }
+  }
+
+  void uploadImage() async {
+    XFile? pickedFile = await imageFunctions.pickImage();
+
+    if (pickedFile != null) {
+      Map<String, String>? uploadResult =
+          await imageFunctions.uploadImageToCloudinary(pickedFile);
+
+      if (uploadResult != null) {
+        _imageUrl = uploadResult['url']!;
+        _publicId = uploadResult['public_id']!;
+      }
     }
   }
 
@@ -55,7 +74,20 @@ class _StudentFormScreenState extends State<StudentFormScreen> {
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  const Icon(Icons.person, size: 80, color: Colors.blueAccent),
+                  GestureDetector(
+                    onTap: uploadImage,
+                    child: CircleAvatar(
+                      radius: 50,
+                      backgroundColor: Colors.grey[300],
+                      backgroundImage: _imageUrl != null
+                          ? NetworkImage(_imageUrl!) as ImageProvider
+                          : const AssetImage('assets/empty_user.jpg'),
+                      child: _imageUrl == null
+                          ? Image.asset('assets/empty_user.jpg',
+                              fit: BoxFit.cover)
+                          : null,
+                    ),
+                  ),
                   const SizedBox(height: 10),
                   const Divider(),
                   Form(
@@ -188,7 +220,9 @@ class _StudentFormScreenState extends State<StudentFormScreen> {
           age: age,
           email: email,
           gender: _selectedGender!,
-          domain: _selectedDomain!);
+          domain: _selectedDomain!,
+          imageURL: _imageUrl,
+          publicID: _publicId);
       widget.student == null
           ? database.addStudent(studentData)
           : database.updateStudent(studentData, context);
