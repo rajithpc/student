@@ -2,10 +2,23 @@ import 'package:flutter/material.dart';
 import '../models/student_model.dart';
 import 'student_form_screen.dart';
 
-class StudentDetailsScreen extends StatelessWidget {
+class StudentDetailsScreen extends StatefulWidget {
   final StudentModel student;
 
   const StudentDetailsScreen({super.key, required this.student});
+
+  @override
+  State<StudentDetailsScreen> createState() => _StudentDetailsScreenState();
+}
+
+class _StudentDetailsScreenState extends State<StudentDetailsScreen> {
+  late StudentModel student;
+
+  @override
+  void initState() {
+    super.initState();
+    student = widget.student;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -65,13 +78,14 @@ class StudentDetailsScreen extends StatelessWidget {
       ),
       floatingActionButton: FloatingActionButton(
           child: const Icon(Icons.edit),
-          onPressed: () {
-            Navigator.push(
+          onPressed: () async {
+            student = await Navigator.push(
               context,
               MaterialPageRoute(
                 builder: (context) => StudentFormScreen(student: student),
               ),
             );
+            setState(() {});
           }),
     );
   }

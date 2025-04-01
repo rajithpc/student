@@ -35,6 +35,8 @@ class _StudentFormScreenState extends State<StudentFormScreen> {
       _emailController.text = widget.student!.email;
       _selectedGender = widget.student!.gender;
       _selectedDomain = widget.student!.domain;
+      _imageUrl = widget.student!.imageURL;
+      _publicId = widget.student!.publicID;
     }
   }
 
@@ -84,7 +86,7 @@ class _StudentFormScreenState extends State<StudentFormScreen> {
                         radius: 50,
                         backgroundColor: Colors.grey[300],
                         backgroundImage: _imageUrl != null
-                            ? NetworkImage(_imageUrl!) as ImageProvider
+                            ? NetworkImage(_imageUrl!)
                             : const AssetImage('assets/empty_user.jpg'),
                         child: _imageUrl == null
                             ? Image.asset('assets/empty_user.jpg',
@@ -232,7 +234,7 @@ class _StudentFormScreenState extends State<StudentFormScreen> {
       widget.student == null
           ? database.addStudent(studentData)
           : database.updateStudent(studentData, context);
-      Navigator.pop(context, true);
+      Navigator.pop(context, studentData);
     }
   }
 }
