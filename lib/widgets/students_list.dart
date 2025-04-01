@@ -23,6 +23,9 @@ class _StudentsListState extends State<StudentsList> {
     return Column(
       children: [
         Search(onSearch: _filterStudents),
+        const SizedBox(
+          height: 20,
+        ),
         Expanded(
           child: StreamBuilder<QuerySnapshot>(
             stream:

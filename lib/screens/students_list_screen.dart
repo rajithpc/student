@@ -19,7 +19,12 @@ class _StudentsListScreenState extends State<StudentsListScreen> {
         centerTitle: true,
         title: const Text('Students List'),
       ),
-      body: const Center(child: StudentsList()),
+      body: Center(
+          child: ConstrainedBox(
+              constraints: const BoxConstraints(
+                maxWidth: 600,
+              ),
+              child: const StudentsList())),
       floatingActionButton: FloatingActionButton(
         child: const Icon(Icons.add),
         onPressed: () async {

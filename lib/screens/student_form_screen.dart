@@ -65,141 +65,147 @@ class _StudentFormScreenState extends State<StudentFormScreen> {
       body: Center(
         child: Padding(
           padding: const EdgeInsets.all(8.0),
-          child: Card(
-            elevation: 4,
-            shape:
-                RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-            child: Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  GestureDetector(
-                    onTap: uploadImage,
-                    child: CircleAvatar(
-                      radius: 50,
-                      backgroundColor: Colors.grey[300],
-                      backgroundImage: _imageUrl != null
-                          ? NetworkImage(_imageUrl!) as ImageProvider
-                          : const AssetImage('assets/empty_user.jpg'),
-                      child: _imageUrl == null
-                          ? Image.asset('assets/empty_user.jpg',
-                              fit: BoxFit.cover)
-                          : null,
+          child: ConstrainedBox(
+            constraints: const BoxConstraints(
+              maxWidth: 600,
+            ),
+            child: Card(
+              elevation: 4,
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10)),
+              child: Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    GestureDetector(
+                      onTap: uploadImage,
+                      child: CircleAvatar(
+                        radius: 50,
+                        backgroundColor: Colors.grey[300],
+                        backgroundImage: _imageUrl != null
+                            ? NetworkImage(_imageUrl!) as ImageProvider
+                            : const AssetImage('assets/empty_user.jpg'),
+                        child: _imageUrl == null
+                            ? Image.asset('assets/empty_user.jpg',
+                                fit: BoxFit.cover)
+                            : null,
+                      ),
                     ),
-                  ),
-                  const SizedBox(height: 10),
-                  const Divider(),
-                  Form(
-                    key: _formKey,
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        TextFormField(
-                          controller: _nameController,
-                          decoration:
-                              const InputDecoration(labelText: "Student Name"),
-                          validator: (value) =>
-                              value!.isEmpty ? "Enter student name" : null,
-                        ),
-                        const SizedBox(height: 10),
-                        TextFormField(
-                          controller: _ageController,
-                          decoration: const InputDecoration(labelText: "Age"),
-                          keyboardType: TextInputType.number,
-                          inputFormatters: [
-                            FilteringTextInputFormatter.digitsOnly
-                          ],
-                          validator: (value) {
-                            if (value!.isEmpty) return "Enter age";
-                            if (int.tryParse(value) == null) {
-                              return "Enter a valid number";
-                            }
-                            return null;
-                          },
-                        ),
-                        const SizedBox(height: 10),
-                        TextFormField(
-                          controller: _emailController,
-                          decoration: const InputDecoration(labelText: "Email"),
-                          validator: (value) =>
-                              value!.isEmpty ? "Enter email" : null,
-                        ),
-                        DropdownButtonFormField<GenderType>(
-                          value: _selectedGender,
-                          decoration:
-                              const InputDecoration(labelText: "Gender"),
-                          items: GenderType.values.map((gender) {
-                            return DropdownMenuItem(
-                              value: gender,
-                              child: Text(gender.name.toUpperCase()),
-                            );
-                          }).toList(),
-                          onChanged: (value) {
-                            setState(() {
-                              _selectedGender = value;
-                            });
-                          },
-                          validator: (value) =>
-                              value == null ? "Select gender" : null,
-                        ),
-                        const SizedBox(height: 10),
-                        DropdownButtonFormField<DomainType>(
-                          value: _selectedDomain,
-                          decoration:
-                              const InputDecoration(labelText: "Domain"),
-                          items: DomainType.values.map((domain) {
-                            return DropdownMenuItem(
-                              value: domain,
-                              child: Text(domain.name.toUpperCase()),
-                            );
-                          }).toList(),
-                          onChanged: (value) {
-                            setState(() {
-                              _selectedDomain = value;
-                            });
-                          },
-                          validator: (value) =>
-                              value == null ? "Select domain" : null,
-                        ),
-                        const SizedBox(height: 20),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: [
-                            ElevatedButton(
-                              onPressed: () {
-                                Navigator.pop(context);
-                              },
-                              style: ElevatedButton.styleFrom(
-                                backgroundColor: Colors.blue,
-                                foregroundColor: Colors.white,
-                                minimumSize: const Size(150, 50),
-                                elevation: 5,
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(10),
+                    const SizedBox(height: 10),
+                    const Divider(),
+                    Form(
+                      key: _formKey,
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          TextFormField(
+                            controller: _nameController,
+                            decoration: const InputDecoration(
+                                labelText: "Student Name"),
+                            validator: (value) =>
+                                value!.isEmpty ? "Enter student name" : null,
+                          ),
+                          const SizedBox(height: 10),
+                          TextFormField(
+                            controller: _ageController,
+                            decoration: const InputDecoration(labelText: "Age"),
+                            keyboardType: TextInputType.number,
+                            inputFormatters: [
+                              FilteringTextInputFormatter.digitsOnly
+                            ],
+                            validator: (value) {
+                              if (value!.isEmpty) return "Enter age";
+                              if (int.tryParse(value) == null) {
+                                return "Enter a valid number";
+                              }
+                              return null;
+                            },
+                          ),
+                          const SizedBox(height: 10),
+                          TextFormField(
+                            controller: _emailController,
+                            decoration:
+                                const InputDecoration(labelText: "Email"),
+                            validator: (value) =>
+                                value!.isEmpty ? "Enter email" : null,
+                          ),
+                          DropdownButtonFormField<GenderType>(
+                            value: _selectedGender,
+                            decoration:
+                                const InputDecoration(labelText: "Gender"),
+                            items: GenderType.values.map((gender) {
+                              return DropdownMenuItem(
+                                value: gender,
+                                child: Text(gender.name.toUpperCase()),
+                              );
+                            }).toList(),
+                            onChanged: (value) {
+                              setState(() {
+                                _selectedGender = value;
+                              });
+                            },
+                            validator: (value) =>
+                                value == null ? "Select gender" : null,
+                          ),
+                          const SizedBox(height: 10),
+                          DropdownButtonFormField<DomainType>(
+                            value: _selectedDomain,
+                            decoration:
+                                const InputDecoration(labelText: "Domain"),
+                            items: DomainType.values.map((domain) {
+                              return DropdownMenuItem(
+                                value: domain,
+                                child: Text(domain.name.toUpperCase()),
+                              );
+                            }).toList(),
+                            onChanged: (value) {
+                              setState(() {
+                                _selectedDomain = value;
+                              });
+                            },
+                            validator: (value) =>
+                                value == null ? "Select domain" : null,
+                          ),
+                          const SizedBox(height: 20),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            children: [
+                              ElevatedButton(
+                                onPressed: () {
+                                  Navigator.pop(context);
+                                },
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: Colors.blue,
+                                  foregroundColor: Colors.white,
+                                  minimumSize: const Size(150, 50),
+                                  elevation: 5,
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(10),
+                                  ),
                                 ),
+                                child: const Text("Cancel"),
                               ),
-                              child: const Text("Cancel"),
-                            ),
-                            ElevatedButton(
-                              onPressed: _saveStudent,
-                              style: ElevatedButton.styleFrom(
-                                backgroundColor: Colors.blue,
-                                foregroundColor: Colors.white,
-                                minimumSize: const Size(150, 50),
-                                elevation: 5,
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(10),
+                              ElevatedButton(
+                                onPressed: _saveStudent,
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: Colors.blue,
+                                  foregroundColor: Colors.white,
+                                  minimumSize: const Size(150, 50),
+                                  elevation: 5,
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(10),
+                                  ),
                                 ),
+                                child: const Text("Save"),
                               ),
-                              child: const Text("Save"),
-                            ),
-                          ],
-                        ),
-                      ],
+                            ],
+                          ),
+                        ],
+                      ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
           ),

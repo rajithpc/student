@@ -20,37 +20,44 @@ class StudentDetailsScreen extends StatelessWidget {
       body: Center(
         child: Padding(
           padding: const EdgeInsets.all(16.0),
-          child: Card(
-            elevation: 4,
-            shape:
-                RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-            child: Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  CircleAvatar(
-                    radius: 50,
-                    backgroundColor: Colors.grey[300],
-                    backgroundImage: student.imageURL != null
-                        ? NetworkImage(student.imageURL!) as ImageProvider
-                        : const AssetImage('assets/empty_user.jpg'),
-                    child: student.imageURL == null
-                        ? Image.asset('assets/empty_user.jpg',
-                            fit: BoxFit.cover)
-                        : null,
-                  ),
-                  const SizedBox(height: 10),
-                  Text(
-                    student.name,
-                    style: const TextStyle(
-                        fontSize: 22, fontWeight: FontWeight.bold),
-                  ),
-                  const Divider(),
-                  _buildDetailRow("Age", student.age.toString()),
-                  _buildDetailRow("Gender", student.gender.name.toUpperCase()),
-                  _buildDetailRow("Domain", student.domain.name.toUpperCase()),
-                ],
+          child: ConstrainedBox(
+            constraints: const BoxConstraints(
+              maxWidth: 600,
+            ),
+            child: Card(
+              elevation: 4,
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10)),
+              child: Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    CircleAvatar(
+                      radius: 50,
+                      backgroundColor: Colors.grey[300],
+                      backgroundImage: student.imageURL != null
+                          ? NetworkImage(student.imageURL!) as ImageProvider
+                          : const AssetImage('assets/empty_user.jpg'),
+                      child: student.imageURL == null
+                          ? Image.asset('assets/empty_user.jpg',
+                              fit: BoxFit.cover)
+                          : null,
+                    ),
+                    const SizedBox(height: 10),
+                    Text(
+                      student.name,
+                      style: const TextStyle(
+                          fontSize: 22, fontWeight: FontWeight.bold),
+                    ),
+                    const Divider(),
+                    _buildDetailRow("Age", student.age.toString()),
+                    _buildDetailRow(
+                        "Gender", student.gender.name.toUpperCase()),
+                    _buildDetailRow(
+                        "Domain", student.domain.name.toUpperCase()),
+                  ],
+                ),
               ),
             ),
           ),
